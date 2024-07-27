@@ -1,0 +1,1 @@
+console.log("all types in a servie should be defined inside here");
