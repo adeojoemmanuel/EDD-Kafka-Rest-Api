@@ -1,22 +1,15 @@
-# auth-service/Dockerfile
+FROM node:18-alpine
 
-# Use Node.js LTS version
-FROM node:lts
+WORKDIR /app
 
-# Create app directory
-WORKDIR /usr/src/app
-
-# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install app dependencies
 RUN npm install
 
-# Bundle app source
 COPY . .
 
-# Build the TypeScript code
 RUN npm run build
 
-# Start the service
-CMD ["npm", "start"]
+EXPOSE 3000
+
+CMD ["node", "dist/index.js"]

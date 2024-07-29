@@ -16,3 +16,4 @@ export const verifyToken = (req: Request, res: Response) => {
 
   res.json({ message: 'Token is valid' });
 };
+
