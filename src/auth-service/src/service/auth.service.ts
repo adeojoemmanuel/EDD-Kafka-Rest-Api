@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { config } from './../../../common/config';
 import { UserModel, IUser } from './../../../database';
+import Web3 from 'web3';
+const web3 = new Web3(process.env.PORT);
 
 const SECRET_KEY = process.env.JWT_SECRET || '';
 
@@ -17,6 +19,7 @@ export const validateToken = (token: string) => {
         return false;
     }
 };
+
 
 export const register = async (email: string, password: string, role: string): Promise<IUser> => {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -34,4 +37,4 @@ export const login = async (email: string, password: string): Promise<string | n
   
     const token = jwt.sign({ id: user._id, role: user.roles }, config.jwtSecret, { expiresIn: '1h' });
     return token;
-  };
+};

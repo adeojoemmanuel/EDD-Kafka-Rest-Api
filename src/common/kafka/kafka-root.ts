@@ -1,5 +1,5 @@
 import { Kafka, KafkaMessage, logLevel } from 'kafkajs';
-
+import { KafkaClient, Producer, Consumer, Message } from 'kafka-node';
 const kafkAuth = new Kafka({
   clientId: 'auth-app',
   brokers: ['localhost:9091'],
