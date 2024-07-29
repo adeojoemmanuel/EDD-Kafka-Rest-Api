@@ -1,9 +1,6 @@
 "use strict";
 
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import { config } from './../../../common/config';
-import { UserModel, IUser } from './../../../database';
 import Web3 from 'web3';
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
@@ -12,8 +9,10 @@ const web3 = new Web3(process.env.PORT);
 const SECRET_KEY = process.env.PORT || 'your_secret_key';
 
 export function handleGoogleAuth() {
+  // return passport.authenticate("google", { failureRedirect: "/login" });
   return passport.authenticate('google', { scope: ['profile', 'email'] });
 }
+
 
 export function handleGoogleCallback() {
   return passport.authenticate('google', { failureRedirect: '/login' });
@@ -68,4 +67,8 @@ export const validateToken = (token: string) => {
   } catch {
       return false;
   }
+};
+
+export const googleAuthCallback = (req: Request, res: Response) => {
+  res.redirect("/dashboard");
 };
