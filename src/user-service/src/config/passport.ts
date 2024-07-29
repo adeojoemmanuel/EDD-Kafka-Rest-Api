@@ -1,48 +1,49 @@
-import passport from 'passport';
-import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
-import User from '../models/user';
-import { config } from './env';
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { UserModel } from './../../../database';
 
 passport.use(
-  new GoogleStrategy(
-    {
-      clientID: config.googleClientId,
-      clientSecret: config.googleClientSecret,
-      callbackURL: '/auth/google/callback',
-    },
-    async (accessToken, refreshToken, profile: Profile, done) => {
-      try {
-        const email = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null;
-
-        if (!email) {
-          throw new Error('No email associated with this account');
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID!,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        callbackURL: "/auth/google/callback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          const email = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null;
+          if (!email) {
+            return done(new Error("No email found in Google profile"), '');
+          }
+  
+          let user = await UserModel.findOne({ googleId: profile.id });
+  
+          if (!user) {
+            user = await UserModel.create({
+              googleId: profile.id,
+              username: profile.displayName,
+              email: email,
+              role: "user",
+            });
+          }
+          done(null, UserModel);
+        } catch (err) {
+          done(err, "unexpected error");
         }
-
-        let user = await User.findOne({ googleId: profile.id });
-
-        if (!user) {
-          user = new User({
-            googleId: profile.id,
-            email: email,
-            name: profile.displayName,
-          });
-          await user.save();
-        }
-
-        done(null, user);
-      } catch (err) {
-        done(err, 'passport error');
       }
-    }
-  )
-);
+    )
+  );
+  
 
 passport.serializeUser((user: any, done) => {
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-  User.findById(id, (err: any, user: Express.User | null) => {
+  UserModel.findById(id, (err: any, user: boolean | Express.User | null | undefined) => {
     done(err, user);
   });
 });
+
+
+export default passport;

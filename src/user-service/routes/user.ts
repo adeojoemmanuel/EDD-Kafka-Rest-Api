@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/profile", async (req, res) => {
   try {
-    const user = await User.findById(req.user?.id);
+    const user = await User.findById(req.user?._id);
     res.json(user);
   } catch (err) {
     res.status(500).json({ message: "Error retrieving user profile" });
@@ -14,7 +14,8 @@ router.get("/profile", async (req, res) => {
 
 router.put("/profile", async (req, res) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(req.user?.id, req.body, { new: true });
+    const userId = req.user?._id as string;
+    const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true });
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: "Error updating user profile" });

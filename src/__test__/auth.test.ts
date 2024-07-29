@@ -1,7 +1,7 @@
 // src/tests/auth.service.test.ts
 import request from 'supertest';
 import express from 'express';
-import { createToken, verifyToken } from '../controllers/auth.controller';
+import { createToken, verifyToken } from './../auth-service/src/controllers/auth.controller';
 
 const app = express();
 app.use(express.json());

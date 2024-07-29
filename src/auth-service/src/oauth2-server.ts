@@ -6,31 +6,20 @@ import OAuth2Server, {
     Falsey,
     Callback,
   } from 'oauth2-server';
-  import { IClient, ClientModel } from './models/client';
-  import { IToken, TokenModel } from './models/token';
-  import { IUser, UserModel } from './models/user';
+  import { IClient, ClientModel } from './../../database/index';
+  import { IToken, TokenModel } from './../../database/index';
+  import { IUser, UserModel } from './../../database/index';
   import {
     IBlockchainTransaction,
     BlockchainTransaction,
-  } from './models/blockchain';
-  import { IProduct, Product } from './models/product';
+  } from './../../database/index';
+  import { IProduct, Product } from './../../database/index';
   import { transformClient, transformToken } from './utils/utility';
-  
-  interface RefreshToken {
-    refreshToken: string;
-    refreshTokenExpiresAt: Date;
-    client: Client;
-    user: User;
-  }
-  
-  interface TokenInterface extends RefreshToken {
-    accessToken: string;
-    accessTokenExpiresAt: Date;
-  }
+  import { RefreshToken, TokenInterface} from './type-interface/auth.interface'
+
   
   const oauth = new OAuth2Server({
     model: {
-      // Retrieve access token from the database
       getAccessToken: async (accessToken: string): Promise<Token | Falsey> => {
         try {
           const token = await TokenModel.findOne({ accessToken })
@@ -44,7 +33,6 @@ import OAuth2Server, {
         }
       },
   
-      // Retrieve client from the database
       getClient: async (
         clientId: string,
         clientSecret: string
@@ -61,7 +49,6 @@ import OAuth2Server, {
         }
       },
   
-      // Save token to the database 
       saveToken: async (
         token: Token,
         client: Client,
@@ -91,7 +78,6 @@ import OAuth2Server, {
         }
       },
   
-      // Retrieve user from the database
       getUser: async (
         username: string,
         password: string
@@ -105,7 +91,6 @@ import OAuth2Server, {
         }
       },
   
-      // Retrieve authorization code from the database
       getAuthorizationCode: async (
         code: string
       ): Promise<AuthorizationCode | Falsey | any> => {
@@ -122,7 +107,6 @@ import OAuth2Server, {
         }
       },
   
-      // Save authorization code to the database
       saveAuthorizationCode: async (
         code: AuthorizationCode,
         client: Client,
@@ -131,7 +115,7 @@ import OAuth2Server, {
       ): Promise<AuthorizationCode | Falsey | any> => {
         try {
           const authCodeDocument = new TokenModel({
-            authorizationCode: code.authorizationCode || '', // Ensure it's a string
+            authorizationCode: code.authorizationCode || '',
             expiresAt: code.expiresAt,
             redirectUri: code.redirectUri,
             client: client.id,
@@ -152,7 +136,6 @@ import OAuth2Server, {
       },
   
   
-      // Revoke authorization code
       revokeAuthorizationCode: async (
         code: AuthorizationCode,
         callback?: Callback<boolean>
@@ -179,16 +162,14 @@ import OAuth2Server, {
             .populate('client user')
             .exec() as any;
   
-          // Ensure the transformed token meets the RefreshToken interface requirements
           return token ? transformToken(token) as RefreshToken : false;
         } catch (error) {
           console.error('Error retrieving refresh token:', error);
           return false;
         }
       },
+
   
-  
-      // Revoke refresh token
       revokeToken: async (
         token: Token,
         callback?: Callback<boolean>
@@ -209,11 +190,10 @@ import OAuth2Server, {
         }
       },
   
-      // Save blockchain transaction
       saveBlockchainTransaction: async (
         transaction: IBlockchainTransaction,
         callback?: Callback<IBlockchainTransaction>
-      ): Promise<IBlockchainTransaction | Falsey> => {
+      ): Promise<IBlockchainTransaction | Falsey | any> => {
         try {
           const transactionDocument = new BlockchainTransaction(transaction);
           const savedTransaction = await transactionDocument.save();
@@ -238,9 +218,10 @@ import OAuth2Server, {
           const transaction = await BlockchainTransaction.findOne({
             transactionId,
           }).exec();
+
           const transformedTransaction = transaction || false;
   
-          if (callback) callback(null, transformedTransaction);
+          if (callback) callback(null, transformedTransaction as any);
   
           return transformedTransaction;
         } catch (error) {
@@ -258,7 +239,7 @@ import OAuth2Server, {
         try {
           const productDocument = new Product(product);
           const savedProduct = await productDocument.save();
-          const transformedProduct = savedProduct as IProduct | undefined; // Adjusting types
+          const transformedProduct = savedProduct as IProduct | undefined; 
   
           if (callback) callback(null, transformedProduct);
   
@@ -266,18 +247,17 @@ import OAuth2Server, {
         } catch (error) {
           console.error('Error saving product:', error);
           if (callback) callback(error);
-          return undefined; // Use undefined instead of false for undefined behavior
+          return undefined; 
         }
       },
   
-      // Retrieve product by ID
       getProduct: async (
         productId: string,
         callback?: Callback<IProduct>
-      ): Promise<IProduct | undefined> => { // Change return type to IProduct | undefined
+      ): Promise<IProduct | undefined> => {
         try {
           const product = await Product.findById(productId).exec();
-          const transformedProduct = product as IProduct | undefined; // Adjusting types
+          const transformedProduct = product as IProduct | undefined;
   
           if (callback) callback(null, transformedProduct);
   
@@ -285,7 +265,7 @@ import OAuth2Server, {
         } catch (error) {
           console.error('Error retrieving product:', error);
           if (callback) callback(error);
-          return undefined; // Use undefined instead of false for undefined behavior
+          return undefined;
         }
       },
     },

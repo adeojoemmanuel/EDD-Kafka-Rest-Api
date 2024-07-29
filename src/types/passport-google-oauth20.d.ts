@@ -1,5 +1,3 @@
-// types/passport-google-oauth20.d.ts
-
 declare module 'passport-google-oauth20' {
   import { Strategy as PassportStrategy } from 'passport';
   import { Request } from 'express';

@@ -1,7 +1,7 @@
-import { IClient } from '../models/client';
-import { IUser } from '../models/user';
-import { IToken } from '../models/token';
+import { IClient, IUser, IToken } from './../../../database/index';
 import { Token, Client, User } from 'oauth2-server';
+import { KafkaClient, Producer, Consumer, Message } from 'kafka-node';
+import { config } from './../../../common/config';
 
 export function transformClient(client: IClient): Client {
     return {
