@@ -8,19 +8,19 @@ import passport from 'passport';
 const web3 = new Web3(process.env.PORT);
 const SECRET_KEY = process.env.PORT || 'your_secret_key';
 
-export function handleGoogleAuth() {
+export function handleGoogleAuthc() {
   return passport.authenticate('google', { scope: ['profile', 'email'] });
 }
 
-export function handleGoogleCallback() {
+export function handleGoogleCallbackc() {
   return passport.authenticate('google', { failureRedirect: '/login' });
 }
 
-export function handleGoogleRedirect(req: Request, res: Response) {
+export function handleGoogleRedirectc(req: Request, res: Response) {
   res.redirect('/dashboard');
 }
 
-export function handleLogout() {
+export function handleLogoutc() {
   return (req: Request, res: Response, next: NextFunction) => {
     req.logout((err) => {
       if (err) {
@@ -31,32 +31,32 @@ export function handleLogout() {
   };
 }
 
-export function handleRegister() {
+export function handleRegisterc() {
   return (req: Request, res: Response) => {
     const address = req.params.address;
     res.send(`Register user with address: ${address}`);
   };
 }
 
-export function handleLogin() {
+export function handleLoginc() {
   return (req: Request, res: Response) => {
     const address = req.params.address;
     res.send(`Login user with address: ${address}`);
   };
 }
 
-export function handleValidateToken() {
+export function handleValidateTokenc() {
   return (req: Request, res: Response) => {
     const address = req.params.address;
     res.send(`Validate token for address: ${address}`);
   };
 }
 
-export const generateToken = (username: string) => {
+export const generateTokenc = (username: string) => {
   return jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
 };
 
-export const validateToken = (token: string) => {
+export const validateTokenc = (token: string) => {
   try {
       jwt.verify(token, SECRET_KEY);
       return true;

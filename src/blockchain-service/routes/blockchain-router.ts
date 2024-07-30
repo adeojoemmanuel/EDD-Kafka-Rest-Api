@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import Web3 from 'web3';
-import { getBalance  } from './../src/service/blockchain.service';
+import { getBlockchainData, processTransaction  } from './../src/controllers/blockchain.controller';
 
 const router = Router();
 
-router.get('/register/:address', getBalance);
+router.get('/register/:address', getBlockchainData);
+router.get('/transaction/:address', processTransaction);
 
 export default router;

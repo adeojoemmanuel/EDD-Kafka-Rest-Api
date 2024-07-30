@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import passport from "passport";
 import { validateToken, generateToken, handleGoogleAuth, handleGoogleCallback, handleLogout, googleAuthCallback} from './../../user-service/src/service/auth.service';
 

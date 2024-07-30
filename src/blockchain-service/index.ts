@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import session from "express-session";
 import passport from "passport";
-import authRoutes from "./routes/blockchain-service";
+import authRoutes from "./routes/blockchain-router";
 import "./config/passport";
 
 const app = express();
@@ -26,7 +26,3 @@ mongoose.connect(process.env.MONGO_URI!, {})
       console.log(`Auth Service running on port ${PORT}`);
     });
 }).catch((err: any) => console.error(err));
-
-/*
-    auth micro-service for service
-*/ 
