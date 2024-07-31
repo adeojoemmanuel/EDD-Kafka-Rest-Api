@@ -7,12 +7,13 @@ import { Product, IProduct } from './product';
 
 export {
     BlockchainTransaction,
-    IBlockchainTransaction,
     ClientModel,
-    IClient,
     TokenModel,
-    IUser,
     UserModel,
     Product,
     IProduct,
+    IToken,
+    IUser,
+    IClient,
+    IBlockchainTransaction,
 }

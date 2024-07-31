@@ -20,3 +20,5 @@ export interface TokenInterface extends RefreshToken {
   accessToken: string;
   accessTokenExpiresAt: Date;
 }
+
+/•auth interface•/
