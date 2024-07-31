@@ -1,11 +1,13 @@
 import { Router, Request, Response, NextFunction } from "express";
 import passport from "passport";
-import { validateToken, generateToken, handleGoogleAuth, handleGoogleCallback } from './../src/service/auth.service';
+import { authenticateToken, generateUserToken, loginUser, registerUser } from "../src/controllers/auth.controller";
+import { handleGoogleCallback } from "../src/service/auth.service";
 
 const router = Router();
 
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
+// Google Authentication Routes
 router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
@@ -13,25 +15,17 @@ router.get(
     res.redirect("/dashboard");
   }
 );
+router.get('/auth/google/callback', handleGoogleCallback);
 
-// Google OAuth Routes
-router.get('/google', handleGoogleAuth);
-router.get('/google/callback', handleGoogleCallback);
+// User Routes
+router.post('/register', registerUser);
+router.post('/login', loginUser);
 
-// Logout Route
-router.get('/logout', (req: Request, res: Response, next: NextFunction) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect('/');
-  });
-});
+// Token Validation Route
+router.get('/validate-token', authenticateToken);
 
-router.get('/login/:address', generateToken);
-router.get('/vaalidate/:address', validateToken);
-
-
+// Token Generation Route
+router.post('/generate-token', generateUserToken);
 
 
 export default router;
