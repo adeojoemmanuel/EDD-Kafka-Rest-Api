@@ -2,7 +2,6 @@
 
 import jwt from 'jsonwebtoken';
 import Web3 from 'web3';
-import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 
 const web3 = new Web3(process.env.PORT);

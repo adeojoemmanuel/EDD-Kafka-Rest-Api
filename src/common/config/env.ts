@@ -9,4 +9,5 @@ export const config = {
   googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
   kafkaBroker: process.env.KAFKA_BROKER || 'localhost:9092',
+  rpc: process.env.RPC || '',
 };

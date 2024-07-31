@@ -1,11 +1,11 @@
 import request from 'supertest';
 import express from 'express';
-import { createToken, verifyToken } from './../auth-service/src/controllers/auth.controller';
+import { generateToken, validateToken } from './../auth-service/src/service/auth.service';
 
 const app = express();
 app.use(express.json());
-app.post('/token', createToken);
-app.get('/verify', verifyToken);
+app.post('/token', generateToken);
+app.get('/verify', validateToken);
 
 describe('Auth Service', () => {
     it('should return token on valid credentials', async () => {
