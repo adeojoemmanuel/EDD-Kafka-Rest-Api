@@ -1,23 +1,16 @@
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
+import { UserModel, IUser } from './../../../database';
 
-  mongoose.connect('mongodb://localhost:27017/userdb', {});
-
-const UserSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-});
-
-const User = mongoose.model('User', UserSchema);
-
-export const getUser = async (req: Request, res: Response) => {
-  const user = await User.findById(req.params.id);
-  if (!user) return res.sendStatus(404);
-  res.json(user);
+export const getUserById = async (userId: string) => {
+  const user = await UserModel.findById(userId);
+  if (!user) 
+    return {message: 'user not fouund'};
+  return {message: 'user found', data: user};
 };
 
-export const createUser = async (req: Request, res: Response) => {
-  const newUser = new User(req.body);
+export const createUser = async (data: {}) => {
+  const newUser = new UserModel(data);
   await newUser.save();
-  res.status(201).json(newUser);
+  return newUser;
 };
