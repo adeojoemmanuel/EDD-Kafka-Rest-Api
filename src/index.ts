@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to the kafka System!');
+  res.send('Welcome to the Auth System!');
 });
 
 app.listen(PORT, () => {

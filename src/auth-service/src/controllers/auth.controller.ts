@@ -1,21 +1,10 @@
-"use strict";
-
-import jwt from 'jsonwebtoken';
+import { generateToken, validateToken } from '../service/auth.service';
 import Web3 from 'web3';
 import { Request, Response, NextFunction } from 'express';
-import passport from 'passport';
-import { handleGoogleAuthc, handleGoogleCallbackc, handleRegisterc, handleLoginc, handleValidateTokenc, generateTokenc, validateTokenc } from './../../../auth-service/src/service/auth.service';
 
-const web3 = new Web3(process.env.PORT);
+
+const web3 = new Web3(process.env.RPC);
 const SECRET_KEY = process.env.PORT || 'your_secret_key';
-
-export function handleGoogleAuth() {
-  return handleGoogleAuthc;
-}
-
-export function handleGoogleCallback() {
-  return passport.authenticate('google', { failureRedirect: '/login' });
-}
 
 export function handleGoogleRedirect(req: Request, res: Response) {
   res.redirect('/dashboard');
@@ -52,17 +41,4 @@ export function handleValidateToken() {
     res.send(`Validate token for address: ${address}`);
   };
 }
-
-export const generateToken = (username: string) => {
-  return jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
-};
-
-export const validateToken = (token: string) => {
-  try {
-      jwt.verify(token, SECRET_KEY);
-      return true;
-  } catch {
-      return false;
-  }
-};
 

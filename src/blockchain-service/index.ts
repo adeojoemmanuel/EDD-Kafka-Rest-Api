@@ -26,3 +26,7 @@ mongoose.connect(process.env.MONGO_URI!, {})
       console.log(`Auth Service running on port ${PORT}`);
     });
 }).catch((err: any) => console.error(err));
+
+/*
+    auth micro-service for service
+*/ 
