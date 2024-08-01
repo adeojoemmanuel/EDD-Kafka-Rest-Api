@@ -1,6 +1,6 @@
-## Kafka
+## Kafkas
 
-  micro-serice Implementation using Kafka for event creation, subscription, distribution
+- micro-serice Implementation using Kafka for event creation, subscription, distribution
 
 
 ## Build and Run Docker Containers:

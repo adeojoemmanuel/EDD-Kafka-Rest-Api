@@ -2,6 +2,7 @@ import { UserModel, IUser } from './../../../database';
 import { createUserCustomer, sendSingleMessage } from './../../../common/kafka/node.kafka.service';
 import { SingleMessage } from './../../../common/types';
 
+
 export const getUserById = async (userId: string) => {
   const user = await UserModel.findById(userId);
   if (!user) 
