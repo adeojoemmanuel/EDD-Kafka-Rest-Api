@@ -6,7 +6,8 @@ import {
 } from 'passport-google-oauth20';
 
 import {
-    Message,
+    SingleMessage,
+    multipleMessage,
     User,
     userRole,
     EventMessage,
@@ -18,7 +19,8 @@ export {
     StrategyOptionsWithRequest,
     VerifyCallback, 
     Profile,
-    Message,
+    SingleMessage,
+    multipleMessage,
     User,
     userRole,
     EventMessage

@@ -14,7 +14,14 @@ export interface EventMessage {
     user: User;
 }
 
-export interface Message {
+export interface SingleMessage {
     topic: string;
     value: string;
+}
+
+
+export interface multipleMessage {
+    value: string | Buffer;
+    key?: string | Buffer;
+    partition?: number;
 }
