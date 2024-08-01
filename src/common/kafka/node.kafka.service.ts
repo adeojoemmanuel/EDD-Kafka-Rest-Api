@@ -47,7 +47,7 @@ export const sendMultipleMessage = (
   });
 };
 
-export const createUser = (topic: string, callback: (message: Message) => void) => {
+export const createUserCustomer = (topic: string, callback: (message: Message) => void) => {
   const user = new Consumer(client, [{ topic }], { autoCommit: true });
   
   user.on('message', (message) => {

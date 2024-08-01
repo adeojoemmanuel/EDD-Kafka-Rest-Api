@@ -1,5 +1,5 @@
 import { UserModel, IUser } from './../../../database';
-import { createUser, sendSingleMessage } from './../../../common/kafka/node.kafka.service';
+import { createUserCustomer, sendSingleMessage } from './../../../common/kafka/node.kafka.service';
 import { SingleMessage } from './../../../common/types';
 
 export const getUserById = async (userId: string) => {
@@ -9,7 +9,7 @@ export const getUserById = async (userId: string) => {
   return {message: 'user found', data: user};
 };
 
-export const createUserAction = createUser('user-events', async (message: any) => {
+export const createUserAction = createUserCustomer('user-events', async (message: any) => {
   const { event, user } = JSON.parse(message.value);
   switch (event) {
     case 'user-registered':
