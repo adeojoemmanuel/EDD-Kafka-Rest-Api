@@ -1,23 +1,20 @@
 import { Kafka, KafkaMessage, logLevel } from 'kafkajs';
 import { KafkaClient, Producer, Consumer, Message } from 'kafka-node';
+
 const kafkAuth = new Kafka({
-  clientId: 'auth-app',
+  clientId: 'auth-apsp',
   brokers: ['localhost:9091'],
   logLevel: logLevel.ERROR,
 });
 
 const kafkaUser = new Kafka({
-  clientId: "user-system",
+  clientId: "user-app",
   brokers: ["localhost:9092"],
 });
 
-const kafkaProduct = new Kafka({
-  clientId: "user-system",
-  brokers: ["localhost:9092"],
-});
 
 const kafkaBlockchain = new Kafka({
-  clientId: "user-system",
+  clientId: "block-chain-system",
   brokers: ["localhost:9092"],
 });
 

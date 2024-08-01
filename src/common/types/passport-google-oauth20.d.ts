@@ -30,7 +30,6 @@ declare module 'passport-google-oauth20' {
   export interface VerifyFunctionWithRequest {
     (req: Request, accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback): void;
   }
-
   export interface StrategyOptions {
     clientID: string;
     clientSecret: string;
