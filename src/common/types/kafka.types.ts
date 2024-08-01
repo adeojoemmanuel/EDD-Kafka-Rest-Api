@@ -14,9 +14,7 @@ export interface EventMessage {
     user: User;
 }
 
-export type Message = {
-    value: any; 
-    key?: string;
-    headers?: Record<string, string>;
-};
-  
+export interface Message {
+    topic: string;
+    value: string;
+}

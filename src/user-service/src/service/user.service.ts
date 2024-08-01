@@ -13,11 +13,11 @@ export const createUserAction = createUser('user-events', async (message: any) =
   const { event, user } = JSON.parse(message.value);
   switch (event) {
     case 'user-registered':
-      // Constructing a Message object
       const registeredMessage: Message = {
+        topic: 'user-events',
         value: JSON.stringify({ event: 'user-registered', user })
       };
-      
+
       sendMessage('user-events', registeredMessage);
       
       const userProfile = new UserModel({ userId: user._id, name: '', address: '' });
@@ -26,10 +26,12 @@ export const createUserAction = createUser('user-events', async (message: any) =
       break;
       
     case 'user-logged-in':
-      // Constructing a Message object
+      
       const loggedInMessage: Message = {
+        topic: 'user-events',
         value: JSON.stringify({ event: 'user-logged-in', user })
       };
+
       sendMessage('user-events', loggedInMessage);
       
       console.log(`User logged in with email: ${user.email}`);
