@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import session from "express-session";
 import passport from "passport";
-import authRoutes from "./routes/blockchain-router";
+import blockchainRoute from "./routes/blockchain-router";
 import "./config/passport";
 
 const app = express();
@@ -17,7 +17,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.json());
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', blockchainRoute);
 
 const PORT = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGO_URI!, {})
