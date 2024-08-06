@@ -1,13 +1,13 @@
 import express from 'express';
 import { json } from 'body-parser';
-import { getUser, createUser } from './controllers/user.controller';
+import { getUser, createUserc } from './controllers/user.controller';
 import { KafkaProducer, KafkaConsumer } from './kafka';
 
 const app = express();
 app.use(json());
 
 app.get('/user/:id', getUser);
-app.post('/user', createUser);
+app.post('/user', createUserc);
 
 // Initialize Kafka producer and consumer
 KafkaProducer.init();

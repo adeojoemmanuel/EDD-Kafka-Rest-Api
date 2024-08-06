@@ -1,4 +1,7 @@
 import OpenAI from "openai";
+import { creatServiceCustomer, sendSingleMessage } from './../../../common/kafka/node.kafka.service';
+import { SingleMessage } from './../../../common/types';
+
 const openaiApiKey = process.env.OPENAI_API_KEY;
 
 if (!openaiApiKey) {
@@ -25,4 +28,23 @@ export const generateText = async(prompt: string) => {
   }
   return null;
 }
+
+
+export const createChatAction = creatServiceCustomer('chat-events', async (message: any) => {
+  const { event, user } = JSON.parse(message.value);
+  switch (event) {
+    case 'chat-prompt':
+      const promptMessage: SingleMessage = {
+        topic: 'user-events',
+        value: JSON.stringify({ event: 'user-registered', user })
+      };
+
+      sendSingleMessage('user-events', promptMessage);
+      
+      console.log(`User : ${user._id} prompt a question`);
+      break;
+    default:
+      console.log('Unknown event');
+  }
+});
 

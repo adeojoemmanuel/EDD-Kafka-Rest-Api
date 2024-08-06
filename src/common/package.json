@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express-session": "^1.18.0",
+    "kafkajs": "^2.2.4",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
   }
