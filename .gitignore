@@ -2,3 +2,4 @@ node_modules
 .env
 client_secret_960669506114-l79r0pugktjsq05k31a26ib558slg9s1.apps.googleusercontent.com.json
 .DS_Store
+/src/common/config/client_secret_*.json
