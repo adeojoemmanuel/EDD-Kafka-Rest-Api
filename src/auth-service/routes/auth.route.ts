@@ -12,6 +12,16 @@ router.get(
   googleAuthCallback("/login", "/dashboard")
 );
 
+router.get(
+  "/google/alt/callback",
+  googleAuthCallback("/signin-failed", "/welcome")
+);
+
+router.get(
+  "/user/google/callback",
+  googleAuthCallback("/auth-failed", "/user-dashboard")
+);
+
 // User Routes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
