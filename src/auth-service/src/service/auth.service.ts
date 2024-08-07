@@ -14,10 +14,6 @@ export function handleGoogleAuth() {
   return passport.authenticate('google', { scope: ['profile', 'email'] });
 }
 
-export function handleGoogleCallback() {
-  return passport.authenticate('google', { failureRedirect: '/login' });
-}
-
 export const register = async (email: string, password: string, role: string): Promise<IUser> => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = new UserModel({ email, password: hashedPassword, role });
