@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import authRoutes from '../src/auth-service/routes/auth.route';
 import blockchainRoute from './blockchain-service/routes/blockchain-router';
 import userService from './user-service/routes/user.route';
+import commmonSharedFile from './common/routes/common.route';
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/blockchain', blockchainRoute);
 app.use('/api/user', userService);
+app.use('/api/google', commmonSharedFile);
 
 
 app.get('/', (req: Request, res: Response) => {
