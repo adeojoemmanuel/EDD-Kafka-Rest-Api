@@ -3,17 +3,60 @@ node_modules/
 
 # Ignore environment variable files
 .env
+.env.local
+.env.development
+.env.test
+.env.production
 
 # Ignore MacOS system files
 .DS_Store
 
-# Ignore npm debug log files
+# Ignore npm and Yarn debug log files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Ignore log files
+# Ignore log files and logs directory
 logs
 *.log
+*.log.*
 
-client_secret_960669506114-l79r0pugktjsq05k31a26ib558slg9s1.apps.googleusercontent.com.json/src/common/config/client_secret_*.json
+# Ignore Google credentials
+client_secret_*
+
+# Ignore build output
+dist/
+build/
+out/
+
+# Ignore test coverage output
+coverage/
+
+# Ignore temporary files
+*.tmp
+*.swp
+
+# Ignore TypeScript cache
+*.tsbuildinfo
+
+# Ignore IDE and editor settings
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore local history in IntelliJ IDEA
+.localhistory/
+
+# Ignore miscellaneous system files
+Thumbs.db
+Desktop.ini
+
+# Ignore archive files
+*.zip
+*.tar.gz
+*.tgz
+
+# Ignore specific files or directories
+config.local.js
+.secret/
