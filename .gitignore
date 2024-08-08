@@ -1,5 +1,19 @@
-node_modules
+# Ignore node_modules
+node_modules/
+
+# Ignore environment variable files
 .env
-client_secret_960669506114-l79r0pugktjsq05k31a26ib558slg9s1.apps.googleusercontent.com.json
+
+# Ignore MacOS system files
 .DS_Store
-/src/common/config/client_secret_*.json
+
+# Ignore npm debug log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore log files
+logs
+*.log
+
+client_secret_960669506114-l79r0pugktjsq05k31a26ib558slg9s1.apps.googleusercontent.com.json/src/common/config/client_secret_*.json
