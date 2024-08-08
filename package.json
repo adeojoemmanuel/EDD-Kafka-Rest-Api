@@ -24,7 +24,7 @@
     "kafkajs": "^2.2.4",
     "npm": "^10.8.2",
     "oauth2-server": "^3.1.1",
-    "openai": "^4.55.0",
+    "openai": "^4.55.3",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",

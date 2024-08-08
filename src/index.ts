@@ -8,7 +8,7 @@ import commmonSharedFile from './common/routes/common.route';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3033;
 
 app.use(express.json());
 app.use('/api/auth', authRoutes);
