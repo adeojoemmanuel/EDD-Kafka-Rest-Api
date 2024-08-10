@@ -1,33 +1,85 @@
-import { KafkaClient, Producer, Consumer, Message, ProduceRequest } from 'kafka-node';
+import { 
+  KafkaClient, 
+  Producer, 
+  Consumer, 
+  Message, 
+  ProduceRequest 
+} from 'kafka-node';
 import { config } from '../config';
-import { KafkaMessage as KafkaJsMessage } from 'kafkajs';
+import { 
+  BlockchainEventType, 
+  ParsedMessage, 
+  CustomKafkaMessage, 
+  CustomKafkaJsMessage} 
+from './kafka-topic.type';
 
-const client = new KafkaClient({ kafkaHost: config.kafkaBroker });
-const producer = new Producer(client);
 
-producer.on('ready', () => {
+// Initialize Kafka Client and Producer
+const userClient: KafkaClient = new KafkaClient({ kafkaHost: config.kafkaBroker });
+const userProducer: Producer = new Producer(userClient);
+
+// Initialize Kafka Client and Consumer for Blockchain
+const blockchainClient: KafkaClient = new KafkaClient({ kafkaHost: 'localhost:9092' });
+const blockchainConsumer: Consumer = new Consumer(
+  blockchainClient,
+  [{ topic: 'blockchain-transaction', partition: 0 }],
+  {
+    autoCommit: true,
+  }
+);
+
+userProducer.on('ready', (): void => {
   console.log('Kafka Producer is ready');
 });
 
-producer.on('error', (err) => {
+userProducer.on('error', (err: Error): void => {
   console.error('Kafka Producer error:', err);
 });
 
+// Function to handle messages received by the blockchain consumer
+export const blockchainBroker = (
+  topic: string, 
+  messages: CustomKafkaMessage | CustomKafkaMessage[]
+): void => {
+  blockchainConsumer.on('message', (message: Message): void => {
+    const parsedMessage: ParsedMessage = JSON.parse(message.value?.toString() || '{}');
 
-export const sendSingleMessage = (topic: string, messages: Message | Message[]) => {
-  producer.send([{ topic, messages }], (err, data) => {
-    if (err) console.error('Kafka Producer send error:', err);
-    else console.log('Message sent:', data);
+    switch (parsedMessage.event) {
+      case BlockchainEventType.TRANSACTION_CREATED:
+        console.log(`Transaction created: ${parsedMessage.data.transactionId}`);
+        break;
+      default:
+        console.log(`Unknown event type: ${parsedMessage.event}`);
+    }
+  });
+
+  blockchainConsumer.on('error', (err: Error): void => {
+    console.error('Kafka Consumer error:', err);
   });
 };
 
+// send a single message
+export const sendSingleMessage = (
+  topic: string, 
+  messages: CustomKafkaMessage | CustomKafkaMessage[]
+): void => {
+  userProducer.send([{ topic, messages }], (err: Error | null, data: any): void => {
+    if (err) {
+      console.error('Kafka Producer send error:', err);
+    } else {
+      console.log('Message sent:', data);
+    }
+  });
+};
+
+// send multiple messages
 export const sendMultipleMessage = (
-  topic: string,
-  messages: Message | Message[],
+  topic: string, 
+  messages: CustomKafkaMessage | CustomKafkaMessage[],
   producer: Producer
-) => {
-  const messagesArray = Array.isArray(messages) ? messages : [messages];
-  const produceRequests: ProduceRequest[] = messagesArray.map((msg) => ({
+): void => {
+  const messagesArray: CustomKafkaMessage[] = Array.isArray(messages) ? messages : [messages];
+  const produceRequests: ProduceRequest[] = messagesArray.map((msg): ProduceRequest => ({
     topic,
     messages: [
       {
@@ -38,7 +90,7 @@ export const sendMultipleMessage = (
     partition: msg.partition,
   }));
 
-  producer.send(produceRequests, (err, data) => {
+  producer.send(produceRequests, (err: Error | null, data: any): void => {
     if (err) {
       console.error('Kafka Producer send error:', err);
     } else {
@@ -47,10 +99,11 @@ export const sendMultipleMessage = (
   });
 };
 
-const convertToKafkaJsMessage = (message: Message): KafkaJsMessage => {
+// convert a message to KafkaJS message format
+const convertToKafkaJsMessage = (message: CustomKafkaMessage): CustomKafkaJsMessage => {
   return {
     value: Buffer.isBuffer(message.value) ? message.value : Buffer.from(message.value || ''),
-    key: Buffer.isBuffer(message.key) ? message.key : (message.key ? Buffer.from(message.key) : null),
+    key: message.key ? (Buffer.isBuffer(message.key) ? message.key : Buffer.from(message.key)) : null,
     timestamp: Date.now().toString(),
     headers: {}, 
     offset: '0',
@@ -58,26 +111,30 @@ const convertToKafkaJsMessage = (message: Message): KafkaJsMessage => {
   };
 };
 
-export const creatServiceCustomer = (
+// create a consumer for service customer
+export const createServiceCustomer = (
   topic: string,
-  callback: (message: KafkaJsMessage) => Promise<void>
+  callback: (message: CustomKafkaJsMessage) => Promise<void>
 ): (() => Promise<void>) => {
-  const user = new Consumer(client, [{ topic }], { autoCommit: true });
-  
-  user.on('message', (message) => {
+  const user: Consumer = new Consumer(userClient, [{ topic }], { autoCommit: true });
+
+  user.on('message', async (message: Message): Promise<void> => {
     sendSingleMessage('user-events', message);
-    const kafkaJsMessage = convertToKafkaJsMessage(message);
-    callback(kafkaJsMessage);
+    const kafkaJsMessage: CustomKafkaJsMessage = convertToKafkaJsMessage(message);
+    await callback(kafkaJsMessage);
   });
 
-  user.on('error', (err) => {
+  user.on('error', (err: Error): void => {
     console.error('Kafka Consumer error:', err);
   });
 
-  return async () => {
-    user.close(true, (err) => {
-      if (err) console.error('Error closing consumer:', err);
-      else console.log('Consumer closed successfully');
+  return async (): Promise<void> => {
+    user.close(true, (err: Error | null): void => {
+      if (err) {
+        console.error('Error closing consumer:', err);
+      } else {
+        console.log('Consumer closed successfully');
+      }
     });
   };
 };
